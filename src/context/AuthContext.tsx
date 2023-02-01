@@ -1,10 +1,11 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query'
 import { createContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { User } from '../../types'
 import { api } from '../lib/api'
 
 export type AuthContext = {
-  user: User
+  user?: User
   token: string
   signup: UseMutationResult<
     {
@@ -40,6 +41,7 @@ type AuthProviderProps = {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  const navigate = useNavigate()
   const [user, setUser] = useState<User>({
     name: '',
     email: '',
@@ -67,6 +69,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
         role: data.role,
         name: data.name,
       })
+      if (data.role === 'admin') {
+        navigate(`/dashboard/admin/${data.email}`)
+      } else {
+        navigate(`/dashboard/user/${data.email}`)
+      }
     },
   })
 
@@ -89,6 +96,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
         role: data.role,
         name: data.name,
       })
+      if (data.role === 'admin') {
+        navigate(`/dashboard/admin/${data.email}`)
+      } else {
+        navigate(`/dashboard/user/${data.email}`)
+      }
     },
   })
   return (
