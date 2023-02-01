@@ -27,8 +27,8 @@ export type AuthContext = {
     },
     unknown,
     {
-      email: string
-      password: string
+      email?: string
+      password?: string
     },
     unknown
   >
@@ -78,7 +78,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
   })
 
   const login = useMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) => {
+    mutationFn: ({
+      email,
+      password,
+    }: {
+      email?: string
+      password?: string
+    }) => {
       return api.post('/auth/local/login', { email, password }).then(
         res =>
           res.data as {

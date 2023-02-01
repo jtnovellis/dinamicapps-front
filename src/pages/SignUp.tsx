@@ -24,6 +24,7 @@ export default function SignUp() {
 
   return (
     <form className='flex flex-col gap-y-5' onSubmit={handleSubmit}>
+      <h1 className='text-gray-600 font-bold text-2xl'>Sign Up</h1>
       <div className='flex flex-col gap-2'>
         <label htmlFor='name' className='text-gray-600 text-sm'>
           Name:
