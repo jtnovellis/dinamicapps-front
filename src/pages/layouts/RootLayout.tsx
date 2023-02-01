@@ -1,16 +1,13 @@
-import { Navigate, Outlet } from 'react-router-dom'
-import { useAuthentication } from '../../hooks/useAthentication'
+import { Outlet } from 'react-router-dom'
+import Header from '../../components/Header'
 
 export default function RootLayout() {
-  const { user } = useAuthentication()
-
-  if (user?.email === '') {
-    return <Navigate to='/' />
-  }
-
   return (
-    <div>
-      <Outlet />
-    </div>
+    <>
+      <Header />
+      <main className='max-w-screen-2xl mx-auto px-2'>
+        <Outlet />
+      </main>
+    </>
   )
 }
