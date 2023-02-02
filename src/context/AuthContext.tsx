@@ -1,10 +1,11 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query'
 import { createContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { User } from '../../types'
 import { api } from '../lib/api'
 
 export type AuthContext = {
-  user: User
+  user?: User
   token: string
   signup: UseMutationResult<
     {
@@ -26,8 +27,8 @@ export type AuthContext = {
     },
     unknown,
     {
-      email: string
-      password: string
+      email?: string
+      password?: string
     },
     unknown
   >
@@ -40,6 +41,7 @@ type AuthProviderProps = {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  const navigate = useNavigate()
   const [user, setUser] = useState<User>({
     name: '',
     email: '',
@@ -67,14 +69,25 @@ export function AuthProvider({ children }: AuthProviderProps) {
         role: data.role,
         name: data.name,
       })
+      if (data.role === 'admin') {
+        navigate(`/dashboard/admin/${data.email}`)
+      } else {
+        navigate(`/dashboard/user/${data.email}`)
+      }
     },
   })
 
   const login = useMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) => {
+    mutationFn: ({
+      email,
+      password,
+    }: {
+      email?: string
+      password?: string
+    }) => {
       return api.post('/auth/local/login', { email, password }).then(
         res =>
-          res.data as {
+          res.data.data as {
             name: string
             email: string
             role: string
@@ -89,6 +102,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
         role: data.role,
         name: data.name,
       })
+      if (data.role === 'admin') {
+        navigate(`/dashboard/admin/${data.email}`)
+      } else {
+        navigate(`/dashboard/user/${data.email}`)
+      }
     },
   })
   return (
