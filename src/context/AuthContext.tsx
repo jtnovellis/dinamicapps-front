@@ -87,7 +87,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }) => {
       return api.post('/auth/local/login', { email, password }).then(
         res =>
-          res.data as {
+          res.data.data as {
             name: string
             email: string
             role: string
